@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion - Esprit Nature{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url("{{ url_for('static', filename='img/font.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: "Segoe UI", sans-serif;
+        margin: 0;
+    }
+
+    .login-wrapper {
+        min-height: calc(100vh - 70px); /* pour laisser la navbar visible */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .login-container {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .form-label {
+        color: #3e7c4e;
+    }
+
+    h2 {
+        color: #2f5d3a;
+    }
+
+    .btn-success {
+        background-color: #4a8f5c;
+        color: white;
+    }
+
+    .btn-success:hover {
+        background-color: #3e7c4e;
+    }
+
+    a {
+        color: #4a8f5c;
+    }
+
+    a:hover {
+        color: #3e7c4e;
+        text-decoration: none;
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-container">
+        <h2 class="mb-4 text-center">Se connecter</h2>
+
+        <form method="POST" action="/login">
+            <div class="mb-3">
+                <label for="email" class="form-label">Adresse e-mail</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Connexion</button>
+        </form>
+
+        <p class="mt-3 text-center">Pas encore de compte ? <a href="/register">Créer un compte</a></p>
+
+        {% if session.get('user_id') %}
+        <div class="alert alert-success mt-4 text-center" role="alert">
+            🎉 Bienvenue de retour ! Nous avons des suggestions d'activités écologiques pour toi ! 🌿
+            <button id="start-chat" class="btn mt-3 btn-success">Commencer la discussion</button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const chatBtn = document.getElementById('start-chat');
+    if (chatBtn) {
+        chatBtn.addEventListener('click', function () {
+            window.location.href = '/chat';
+        });
+    }
+</script>
+{% endblock %}

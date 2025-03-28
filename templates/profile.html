@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Profil{% endblock %}
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" id="flash-alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<h2 class="mb-4 text-success">🌿 Mon Profil</h2>
+
+<form method="POST" action="/profile" class="bg-white p-4 rounded shadow-sm border border-success-subtle">
+  <div class="mb-3">
+    <label class="form-label text-success">Bio 🌱</label>
+    <textarea name="bio" class="form-control" rows="3">{{ user.bio or '' }}</textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label text-success">Âge 🌼</label>
+    <input type="number" class="form-control" name="age" min="10" max="120" value="{{ user.age or '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label text-success">Ville 🏡</label>
+    <input type="text" class="form-control" name="city" value="{{ user.city or '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label text-success">Ce que tu aimes 🍀</label>
+    <textarea name="likes" class="form-control" rows="2">{{ user.likes or '' }}</textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label text-success">Ce que tu n’aimes pas 🍂</label>
+    <textarea name="dislikes" class="form-control" rows="2">{{ user.dislikes or '' }}</textarea>
+  </div>
+
+  <hr>
+  <h5 class="mt-4 text-success">🧠 Tests de personnalité</h5>
+
+  <div class="mb-3">
+    <label class="form-label">MBTI</label>
+    <select name="personality_MBTI" class="form-select">
+      {% for mbti in ['INTJ', 'INTP', 'INFJ', 'INFP', 'ENTJ', 'ENTP', 'ENFJ', 'ENFP',
+                      'ISTJ', 'ISFJ', 'ISTP', 'ISFP', 'ESTJ', 'ESFJ', 'ESTP', 'ESFP'] %}
+        <option value="{{ mbti }}" {% if personalities.get('MBTI') == mbti %}selected{% endif %}>{{ mbti }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Ennéagramme</label>
+    <select name="personality_Enneagramme" class="form-select">
+      {% for enneatype in ['1w9', '1w2', '2w1', '2w3', '3w2', '3w4', '4w3', '4w5', '5w4', '5w6',
+                           '6w5', '6w7', '7w6', '7w8', '8w7', '8w9', '9w8', '9w1'] %}
+        <option value="{{ enneatype }}" {% if personalities.get('Enneagramme') == enneatype %}selected{% endif %}>{{ enneatype }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Big Five</label>
+    <input type="text" class="form-control" name="personality_Big Five" placeholder="ex: O87 C72 E55 A41 N63" value="{{ personalities.get('Big Five') or '' }}">
+  </div>
+
+  <button type="submit" class="btn btn-success mt-3">Enregistrer</button>
+</form>
+
+<script>
+  setTimeout(() => {
+    const alert = document.getElementById("flash-alert");
+    if (alert) {
+      alert.classList.remove("show");
+      alert.classList.add("hide");
+    }
+  }, 10000);
+</script>
+{% endblock %}
